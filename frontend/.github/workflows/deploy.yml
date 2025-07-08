@@ -19,11 +19,11 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-      working-directory: ./Whatapp/frontend
+      working-directory: ./frontend
 
     - name: Build the Vite app
       run: npm run build
-      working-directory: ./Whatapp/frontend
+      working-directory: ./frontend
 
     - name: Upload dist to VPS
       uses: appleboy/scp-action@v0.1.4
