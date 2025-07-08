@@ -35,17 +35,18 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
+          port: 22
           script: |
             sudo rm -rf /var/www/chatapp/*
 
-      - name: 🚀 Upload build files to VPS
+      - name: 🚀 Upload ONLY dist contents to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           port: 22
-          source: "./frontend/dist/*"
+          source: "frontend/dist/*"
           target: "/var/www/chatapp"
 
       - name: 🔁 Reload Nginx (optional)
@@ -54,5 +55,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
+          port: 22
           script: |
             sudo systemctl reload nginx
