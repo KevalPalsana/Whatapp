@@ -26,9 +26,6 @@ jobs:
         run: npm run build
         working-directory: ./frontend
 
-      - name: 📂 List contents of build output
-        run: ls -la ./frontend/dist
-
       - name: 🚀 Upload build files to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -39,12 +36,11 @@ jobs:
           source: "frontend/dist/**"
           target: "/var/www/chatapp"
 
-      # Optional: Restart Nginx/PM2 on server (if needed)
-      # - name: Restart app on VPS
-      #   uses: appleboy/ssh-action@v0.1.10
-      #   with:
-      #     host: ${{ secrets.HOST }}
-      #     username: ${{ secrets.USER }}
-      #     key: ${{ secrets.SSH_KEY }}
-      #     script: |
-      #       pm2 restart your-app-name
+      - name: 🔁 Reload Nginx (optional)
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo systemctl reload nginx
