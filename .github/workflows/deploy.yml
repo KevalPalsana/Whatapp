@@ -10,26 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📦 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: 🔧 Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: 📁 Install dependencies
+      - name: Install dependencies
         run: npm install
         working-directory: ./frontend
 
-      - name: 🛠️ Build Vite App
+      - name: Build Vite App
         run: npm run build
         working-directory: ./frontend
 
-      - name: 📂 Debug: List build files
+      - name: Debug: List build files
         run: ls -la ./frontend/dist
 
-      - name: 🧹 Clean target folder before upload
+      - name: Clean target folder before upload
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.HOST }}
@@ -39,7 +39,7 @@ jobs:
           script: |
             sudo rm -rf /var/www/chatapp/*
 
-      - name: 🚀 Upload ONLY dist contents to VPS
+      - name: Upload dist to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.HOST }}
@@ -49,7 +49,7 @@ jobs:
           source: "frontend/dist/*"
           target: "/var/www/chatapp"
 
-      - name: 🔁 Reload Nginx (optional)
+      - name: Reload Nginx
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.HOST }}
