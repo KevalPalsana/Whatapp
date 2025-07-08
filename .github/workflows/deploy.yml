@@ -10,36 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 📦 Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: 🔧 Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      - name: 📁 Install dependencies
         run: npm install
         working-directory: ./frontend
 
-      - name: Build Vite App
+      - name: 🛠️ Build Vite App
         run: npm run build
         working-directory: ./frontend
 
-      - name: Debug: List build files
+      - name: 📂 List contents of build output
         run: ls -la ./frontend/dist
 
-      - name: Clean target folder before upload
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          script: |
-            sudo rm -rf /var/www/chatapp/*
-
-      - name: Upload dist to VPS
+      - name: 🚀 Upload build files to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.HOST }}
@@ -49,12 +39,12 @@ jobs:
           source: "frontend/dist/*"
           target: "/var/www/chatapp"
 
-      - name: Reload Nginx
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          script: |
-            sudo systemctl reload nginx
+      # Optional: Restart Nginx/PM2 on server (if needed)
+      # - name: Restart app on VPS
+      #   uses: appleboy/ssh-action@v0.1.10
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USER }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     script: |
+      #       pm2 restart your-app-name
