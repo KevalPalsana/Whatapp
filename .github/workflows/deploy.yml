@@ -33,7 +33,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           port: 22
-          source: "frontend/dist/**"
+          source: "frontend/dist/*"
           target: "/var/www/chatapp"
 
       - name: 🔁 Reload Nginx (optional)
